@@ -333,14 +333,14 @@ var Graph = function() {
   		            .attr("stroke", "#FFF")
   		            .attr("stroke-width", "0.4px")
   		            .attr("d", path)
-                  .on(EVENTNAME_TOUCHSTART, function(d){
+                  .on("mouseover", function(d){
                         d3.select(this).style("fill", "pink");
   											return tooltip.style("visibility", "visible").text(d.properties.GST_NAME + d.properties.MOJI);
   								})
-  						    .on(EVENTNAME_TOUCHMOVE, function(d){
+  						    .on("mousemove", function(d){
   											return tooltip.style("top", (event.pageY-20)+"px").style("left",(event.pageX)+"px");
   								})
-  						    .on(EVENTNAME_TOUCHEND, function(d){
+  						    .on("mouseout", function(d){
                         var _i = functiontofindIndexByKeyValue(dataSet, "chome", d.properties.MOJI);
 
       									if (_i == undefined) { _i = 0; var _index = 0; } else {
@@ -352,6 +352,8 @@ var Graph = function() {
   											return tooltip.style("visibility", "hidden");
   								});
   }
+
+
 
 
 
@@ -387,19 +389,18 @@ var Graph = function() {
   		            .attr("stroke-width", "0.4px")
   		            .attr("d", path)
   		            .attr("cursor","pointer")
-  								.on(EVENTNAME_TOUCHSTART, function(d){
+  								.on("mouseover", function(d){
                         d3.select(this).style("opacity", "0.0");
   											return tooltip.style("visibility", "visible").text(d.properties.GST_NAME + d.properties.MOJI);
   								})
-  						    .on(EVENTNAME_TOUCHMOVE, function(d){
+  						    .on("mousemove", function(d){
   											return tooltip.style("top", (event.pageY-20)+"px").style("left",(event.pageX)+"px");
   								})
-  						    .on(EVENTNAME_TOUCHEND, function(d){
+  						    .on("mouseout", function(d){
                         d3.select(this).style("stroke", "none");
                         d3.select(this).style("opacity", "1.0");
   											return tooltip.style("visibility", "hidden");
   								});
-
 
 
 
