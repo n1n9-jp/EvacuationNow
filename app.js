@@ -62,8 +62,13 @@ if (!document.createElementNS) {
   document.getElementsByTagName("form")[0].style.display = "none";
 }
 
-
-
+/*----------------
+click or touch
+----------------*/
+var supportTouch = 'ontouchend' in document;
+var EVENTNAME_TOUCHSTART = supportTouch ? 'touchstart' : 'mousedown';
+var EVENTNAME_TOUCHMOVE = supportTouch ? 'touchmove' : 'mousemove';
+var EVENTNAME_TOUCHEND = supportTouch ? 'touchend' : 'mouseup';
 
 
 var Graph = function() {
@@ -144,6 +149,7 @@ var Graph = function() {
                   //東京都国立市
                   gLat = 35.683885;
                   gLon = 139.44138;
+                  scale = 2000000;
   					      self.e.publish('init');
                 } ,
             		// [第3引数] オプション
@@ -157,6 +163,7 @@ var Graph = function() {
               //東京都国立市
               gLat = 35.683885;
               gLon = 139.44138;
+              scale = 2000000;
 
   					  self.e.publish('init');
             }
@@ -325,8 +332,27 @@ var Graph = function() {
   								})
   		            .attr("stroke", "#FFF")
   		            .attr("stroke-width", "0.4px")
-  		            .attr("d", path);
+  		            .attr("d", path)
+                  .on(EVENTNAME_TOUCHSTART, function(d){
+                        d3.select(this).style("fill", "pink");
+  											return tooltip.style("visibility", "visible").text(d.properties.GST_NAME + d.properties.MOJI);
+  								})
+  						    .on(EVENTNAME_TOUCHMOVE, function(d){
+  											return tooltip.style("top", (event.pageY-20)+"px").style("left",(event.pageX)+"px");
+  								})
+  						    .on(EVENTNAME_TOUCHEND, function(d){
+                        var _i = functiontofindIndexByKeyValue(dataSet, "chome", d.properties.MOJI);
+
+      									if (_i == undefined) { _i = 0; var _index = 0; } else {
+      										var _index = dataSet[_i][dataManage.kindArray()[menuKindNum]];
+      									}
+
+                        d3.select(this).style("fill", color(_index));
+
+  											return tooltip.style("visibility", "hidden");
+  								});
   }
+
 
 
 
@@ -349,12 +375,9 @@ var Graph = function() {
   		            })
   		            .attr("fill", function(d){
 
-  									// console.log(d.properties.MOJI);
   									var _i = functiontofindIndexByKeyValue(dataSet, "chome", d.properties.MOJI);
 
-  									if (_i == undefined) {
-  										_i = 0; var _index = 0;
-  									} else {
+  									if (_i == undefined) { _i = 0; var _index = 0; } else {
   										var _index = dataSet[_i][dataManage.kindArray()[menuKindNum]];
   									}
 
@@ -364,15 +387,20 @@ var Graph = function() {
   		            .attr("stroke-width", "0.4px")
   		            .attr("d", path)
   		            .attr("cursor","pointer")
-  								.on("mouseover", function(d){
+  								.on(EVENTNAME_TOUCHSTART, function(d){
+                        d3.select(this).style("opacity", "0.0");
   											return tooltip.style("visibility", "visible").text(d.properties.GST_NAME + d.properties.MOJI);
   								})
-  						    .on("mousemove", function(d){
-  											return tooltip.style("top", (event.pageY-20)+"px").style("left",(event.pageX+10)+"px");
+  						    .on(EVENTNAME_TOUCHMOVE, function(d){
+  											return tooltip.style("top", (event.pageY-20)+"px").style("left",(event.pageX)+"px");
   								})
-  						    .on("mouseout", function(d){
+  						    .on(EVENTNAME_TOUCHEND, function(d){
+                        d3.select(this).style("stroke", "none");
+                        d3.select(this).style("opacity", "1.0");
   											return tooltip.style("visibility", "hidden");
   								});
+
+
 
 
 
