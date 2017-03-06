@@ -1,29 +1,6 @@
-/********************************************************************************
-
-	SYNCER 〜 知識、感動をみんなと同期(Sync)するブログ
-
-	* 配布場所
-	https://syncer.jp/how-to-use-geolocation-api
-
-	* 最終更新日時
-	2015/08/16 03:17
-
-	* 作者
-	あらゆ
-
-	** 連絡先
-	Twitter: https://twitter.com/arayutw
-	Facebook: https://www.facebook.com/arayutw
-	Google+: https://plus.google.com/114918692417332410369/
-	E-mail: info@syncer.jp
-
-	※ バグ、不具合の報告、提案、ご要望など、お待ちしております。
-	※ 申し訳ありませんが、ご利用者様、個々の環境における問題はサポートしていません。
-
-********************************************************************************/
 
 
-// ユーザーの端末がGeoLocation APIに対応しているかの判定
+
 
 // 対応している場合
 if( navigator.geolocation )
@@ -31,20 +8,17 @@ if( navigator.geolocation )
 	// 現在地を取得
 	navigator.geolocation.getCurrentPosition(
 
-		// [第1引数] 取得に成功した場合の関数
-		function( position )
+		function( _position )
 		{
-			// 取得したデータの整理
-			var data = position.coords ;
+			var _data = _position.coords ;
 
-			// データの整理
-			var lat = data.latitude ;
-			var lng = data.longitude ;
-			var alt = data.altitude ;
-			var accLatlng = data.accuracy ;
-			var accAlt = data.altitudeAccuracy ;
-			var heading = data.heading ;			//0=北,90=東,180=南,270=西
-			var speed = data.speed ;
+			var lat = _data.latitude ;
+			var lng = _data.longitude ;
+			var alt = _data.altitude ;
+			var accLatlng = _data.accuracy ;
+			var accAlt = _data.altitudeAccuracy ;
+			var heading = _data.heading ;			//0=北,90=東,180=南,270=西
+			var speed = _data.speed ;
 
 			// アラート表示
 //			alert( "あなたの現在位置は、\n[" + lat + "," + lng + "]\nです。" ) ;
@@ -52,20 +26,7 @@ if( navigator.geolocation )
 			// HTMLへの書き出し
 			document.getElementById( 'result' ).innerHTML = '<dl><dt>緯度</dt><dd>' + lat + '</dd><dt>経度</dt><dd>' + lng + '</dd><dt>高度</dt><dd>' + alt + '</dd><dt>緯度、経度の精度</dt><dd>' + accLatlng + '</dd><dt>高度の精度</dt><dd>' + accAlt + '</dd><dt>方角</dt><dd>' + heading + '</dd><dt>速度</dt><dd>' + speed + '</dd></dl>' ;
 
-			// 位置情報
-			var latlng = new google.maps.LatLng( lat , lng ) ;
 
-			// Google Mapsに書き出し
-			var map = new google.maps.Map( document.getElementById( 'map-canvas' ) , {
-				zoom: 15 ,				// ズーム値
-				center: latlng ,		// 中心座標 [latlng]
-			} ) ;
-
-			// マーカーの新規出力
-			new google.maps.Marker( {
-				map: map ,
-				position: latlng ,
-			} ) ;
 		},
 
 		// [第2引数] 取得に失敗した場合の関数
@@ -79,23 +40,16 @@ if( navigator.geolocation )
 
 			// エラー番号に対応したメッセージ
 			var errorInfo = [
-				"原因不明のエラーが発生しました…。" ,
-				"位置情報の取得が許可されませんでした…。" ,
-				"電波状況などで位置情報が取得できませんでした…。" ,
-				"位置情報の取得に時間がかかり過ぎてタイムアウトしました…。"
+				"原因不明のエラーが発生しました。" ,
+				"位置情報の取得が許可されませんでした。" ,
+				"電波状況などで位置情報が取得できませんでした。" ,
+				"位置情報の取得に時間がかかり過ぎてタイムアウトしました。"
 			] ;
 
-			// エラー番号
-			var errorNo = error.code ;
-
-			// エラーメッセージ
-			var errorMessage = "[エラー番号: " + errorNo + "]\n" + errorInfo[ errorNo ] ;
-
-			// アラート表示
-			alert( errorMessage ) ;
-
-			// HTMLに書き出し
-			document.getElementById("result").innerHTML = errorMessage;
+			var errorNo = error.code ; // エラー番号
+			var errorMessage = "[エラー番号: " + errorNo + "]\n" + errorInfo[ errorNo ] ; // エラーメッセージ
+			alert( errorMessage ) ; // アラート表示
+			document.getElementById("result").innerHTML = errorMessage; // HTMLに書き出し
 		} ,
 
 		// [第3引数] オプション
@@ -111,12 +65,7 @@ if( navigator.geolocation )
 // 対応していない場合
 else
 {
-	// エラーメッセージ
-	var errorMessage = "お使いの端末は、GeoLacation APIに対応していません。" ;
-
-	// アラート表示
-	alert( errorMessage ) ;
-
-	// HTMLに書き出し
-	document.getElementById( 'result' ).innerHTML = errorMessage ;
+	var errorMessage = "お使いの端末は、GeoLacation APIに対応していません。" ; // エラーメッセージ
+	alert( errorMessage ) ; // アラート表示
+	document.getElementById( 'result' ).innerHTML = errorMessage ; // HTMLに書き出し
 }
