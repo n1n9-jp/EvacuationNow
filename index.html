@@ -1,23 +1,86 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="robots" content="noindex,nofollow">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="geolocation-api.css" rel="stylesheet">
-		<title></title>
+<head>
+<meta charset="utf-8">
+<script src="lib/d3.v3.js"></script>
+<script src="lib/queue.v1.min.js"></script>
+<script src="lib/colorbrewer.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js" charset="utf-8"></script>
+<script src="lib/cartogram.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="dataManager.js"></script>
+<script src="app.js"></script>
+<link rel="stylesheet" type="text/css" href="main.css">
 
-	</head>
+<title>東京防災地図</title>
+</head>
 <body>
 
-
-
-<h2>取得したデータ</h2>
-
-	<p>下記の位置情報を取得することができました。</p>
-	<dl id="result"></dl>
-
-<script src="get-current-position.js"></script>
+<div id="container">
+	<div id="contentTitle">
+    <div class="ja">東京防災地図</div>
+    <div class="en">Tokyo Bosai Map</div>
+  </div>
+	<div id="message"></div>
+	<div id="kindBlock"></div>
+	<div id="chartArea"><span id="tooltip"></span></div>
+</div>
 
 </body>
 </html>
+
+
+<!-- "properties": {
+		"AREA": 142482.6,
+		"PERIMETER": 2129.314,
+		"H22KA07_": 0,
+		"H22KA07_ID": 0,
+		"KEN": "13",
+		"CITY": "105",
+		"KEN_NAME": "東京都",
+		"SITYO_NAME": null,
+		"GST_NAME": "文京区",
+		"CSS_NAME": null,
+		"HCODE": 8101,
+		"KIHON1": "0220",
+		"DUMMY1": "-",
+		"KIHON2": "01",
+		"KEYCODE1": "105022001",
+		"KEYCODE2": "105022001",
+		"AREA_MAX_F": "M",
+		"KIGO_D": null,
+		"N_KEN": null,
+		"N_CITY": null,
+		"N_C1": 0,
+		"KIGO_E": null,
+		"KIGO_I": null,
+		"TATE": 0,
+		"DIR": 0,
+		"HIGHT": 50,
+		"JIKAKU": 10,
+		"NMOJI": 5,
+		"MOJI": "湯島１丁目",
+		"SEQ_NO2": 2687,
+		"KSUM": 13,
+		"CSUM": 18,
+		"JINKO": 822,
+		"SETAI": 556,
+		"X_CODE": 139.76521,
+		"Y_CODE": 35.70134,
+		"KCODE1": "0220-01",
+		"KEY_CODE": "13105022001",
+		"H22KA08_": 0,
+		"H22KA08_ID": 0,
+		"H22KA09_": 0,
+		"H22KA09_ID": 0,
+		"H22KA10_": 0,
+		"H22KA10_ID": 0,
+		"H22KA11_": 0,
+		"H22KA11_ID": 0,
+		"H22KA12_": 0,
+		"H22KA12_ID": 0,
+		"H22KA13_": 2688,
+		"H22KA13_ID": 2687,
+		"H22KA14_": 0,
+		"H22KA14_ID": 0
+} -->
