@@ -69,18 +69,25 @@ if (!document.createElementNS) {
 var Graph = function() {
 
         var proj, color;
-        var layer, worldcountries, tokyoframe;
+        var layer, worldcountries, tokyoframe, markerLayer;
   			// var topology, geometries, dataById = {};
-  			// var dataById = {};
+  			var dataById = {};
   			var features, frameFeatures, dataSet, prefData;
         var zoom;
         var path;
         var selectedPref = "";
-        var gLat, gLon;
         var selectedKind = "";
       	var menuKindNum = 0;
         var scale = 300000;
+        //var scale = 2000000;
 
+        //東京都国立市
+        var gLat;
+        var gLon;
+
+        //アーツ千代田3331
+        // var gLat = 35.704269;
+        // var gLon = 139.770719;
 
 
 
@@ -95,7 +102,8 @@ var Graph = function() {
   					// this.e.subscribe( 'init:menu', this.initMenu );
   					this.e.subscribe( 'init:menu', this.initMenuData );
   					this.e.subscribe( 'draw:map', this.drawMap );
-  					this.e.subscribe( 'draw:lines', this.drawUpdate );
+
+  					this.e.subscribe( 'draw:marker', this.drawUpdate );
   					this.e.subscribe( 'init:zoom', this.zoomInit );
   					this.e.subscribe( 'update:map', this.updateMap );
 
@@ -116,11 +124,12 @@ var Graph = function() {
             	navigator.geolocation.getCurrentPosition(
                 function( _position )
             		{
+                  console.log("_position", _position);
                   var _data = _position.coords ;
 
             			gLat = _data.latitude ;
             			gLon = _data.longitude ;
-                  scale = 600000;
+                  scale = 2000000;
             			// var alt = _data.altitude ;
             			// var accLatlng = _data.accuracy ;
             			// var accAlt = _data.altitudeAccuracy ;
@@ -143,6 +152,7 @@ var Graph = function() {
             		}
               ) ;
             } else {
+              //東京都国立市
               gLat = 35.683885 ;
               gLon = 139.44138 ;
             }
@@ -158,6 +168,8 @@ var Graph = function() {
 
   			this.drawInit = function() {
 
+                  console.log("gLat", gLat);
+                  console.log("gLon", gLon);
   					//map = d3.select("#chart"),
 
 				    layer = d3.select("#chart").append("g")
@@ -171,7 +183,8 @@ var Graph = function() {
 				      .attr("id", "tokyoframe")
 				      .selectAll("path");
 
-
+            markerLayer = layer.append("g")
+  				      .attr("id", "markerLayer");
 
   					// var proj = d3.geo.azimuthalEqualArea(),
   					proj = d3.geo.mercator()
@@ -213,7 +226,9 @@ var Graph = function() {
 
   									_data.forEach(function(d) {
   									  // d.ALLH28 = parseFloat(d.ALLH28);
-  									  d["建物倒壊危険度"] = parseFloat(d["建物倒壊危険度"]);
+  									  d["建物倒壊危険度"] = parseInt(d["建物倒壊危険度"]);
+  									  d["建物倒壊危険度"] = parseInt(d["火災危険度"]);
+  									  d["建物倒壊危険度"] = parseInt(d["総合危険度"]);
   									});
   									dataSet = _data;
   									console.log("_data", _data);
@@ -263,7 +278,7 @@ var Graph = function() {
       					.on("change", function(d,i){
       				      	menuKindNum = i;
                       // selectedPref = d[0];
-      								console.log(d);
+      								// console.log(d);
       				      	self.e.publish('update:map');
       					});
 
@@ -276,6 +291,7 @@ var Graph = function() {
       					});
 
       				self.e.publish( 'draw:map' );
+      				self.e.publish( 'draw:marker' );
 
       		}
 
@@ -318,7 +334,7 @@ var Graph = function() {
   		        // var features = carto.features(topology, geometries),
   		            path = d3.geo.path().projection(proj);
 
-  						console.log("worldcountries", worldcountries);
+  						// console.log("worldcountries", worldcountries);
 
   		        worldcountriesTest = worldcountries.data(features)
   		          .enter()
@@ -371,65 +387,48 @@ var Graph = function() {
   				            .attr("stroke", "#00441b")
   				            .attr("opacity", "0.6")
   				            .attr("stroke-width", "0.4px")
-  				            .attr("d", path)
-                      .on("click", clicked);
+  				            .attr("d", path);
+                      // .on("click", clicked);
   				// self.e.publish( 'init:zoom' );
 
   		}
 
 
 
-      function clicked(d) {
-        console.log("clicked", d);
-
-        var bounds = path.bounds(d),
-            dx = bounds[1][0] - bounds[0][0],
-            dy = bounds[1][1] - bounds[0][1],
-            x = (bounds[0][0] + bounds[1][0]) / 2,
-            y = (bounds[0][1] + bounds[1][1]) / 2,
-            scale = 0.4 / Math.max(dx / width, dy / height),
-            translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-        worldcountriesTest.transition()
-            .duration(750)
-            .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
-
-        tokyoframeTest.transition()
-            .duration(750)
-            .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
-
-
-      }
+      // function clicked(d) {
+      //   console.log("clicked", d);
+      //
+      //   var bounds = path.bounds(d),
+      //       dx = bounds[1][0] - bounds[0][0],
+      //       dy = bounds[1][1] - bounds[0][1],
+      //       x = (bounds[0][0] + bounds[1][0]) / 2,
+      //       y = (bounds[0][1] + bounds[1][1]) / 2,
+      //       scale = 0.4 / Math.max(dx / width, dy / height),
+      //       translate = [width / 2 - scale * x, height / 2 - scale * y];
+      //
+      //   worldcountriesTest.transition()
+      //       .duration(750)
+      //       .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+      //
+      //   tokyoframeTest.transition()
+      //       .duration(750)
+      //       .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+      //
+      //
+      // }
 
 
 
       this.drawUpdate = function() {
 
-            console.log("drawUpdate");
-            // proj.scale(300000).center([gLat, gLon]);
-
-
-            // var newcentre = d3.mouse(this)
-
-        		// projection.rotate([- projection.invert(newcentre)[0], - projection.invert(newcentre)[1]]);
-        		// proj.translate([gLat, - gLon]);
-
-            console.log(gLat, gLon);
-        		// proj.rotate([gLat, gLon]);
-        		//proj.rotate([gLon, gLat]);
-        		proj.translate([gLon, gLat]);
-
-        	  	// Transition to the new projection
-
-
-
-        	 	worldcountries.selectAll("path")
-        		      .transition()
-        	      	.duration(1000)
-        	      	.attr("d", path);
-
-
-
+            markerLayer.append('image')
+                .attr("class", "marker")
+                .attr("x", function(d) { return proj([gLon, gLat])[0]; })
+                .attr("y", function(d) { return proj([gLon, gLat])[1]; })
+                .attr("xlink:href", "data/marker-15.svg")
+                .attr("fill", "#F09")
+                .attr("width", 15)
+                .attr("height", 15);
 
       }
 
