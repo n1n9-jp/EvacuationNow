@@ -135,6 +135,7 @@ var Graph = function() {
             			// var accAlt = _data.altitudeAccuracy ;
             			// var heading = _data.heading ;			//0=北,90=東,180=南,270=西
             			// var speed = _data.speed ;
+                  self.e.publish('init');
                 },
 
             		// [第2引数] 取得に失敗した場合の関数
@@ -143,6 +144,7 @@ var Graph = function() {
                   //東京都国立市
                   gLat = 35.683885;
                   gLon = 139.44138;
+  					      self.e.publish('init');
                 } ,
             		// [第3引数] オプション
             		{
@@ -155,9 +157,11 @@ var Graph = function() {
               //東京都国立市
               gLat = 35.683885;
               gLon = 139.44138;
+
+  					  self.e.publish('init');
             }
 
-  					self.e.publish('init');
+
         }
 
 
@@ -345,7 +349,7 @@ var Graph = function() {
   		            })
   		            .attr("fill", function(d){
 
-  									console.log(d.properties.MOJI);
+  									// console.log(d.properties.MOJI);
   									var _i = functiontofindIndexByKeyValue(dataSet, "chome", d.properties.MOJI);
 
   									if (_i == undefined) {
@@ -379,7 +383,7 @@ var Graph = function() {
   				          .append("path")
   				            .attr("class", "state")
   				            .attr("id", function(d) {
-                        console.log("ward_ja", d.properties.ward_ja);
+                        // console.log("ward_ja", d.properties.ward_ja);
   				              return d.properties.ward_ja;
   				            })
   				            .attr("fill", "none")
