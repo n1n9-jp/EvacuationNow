@@ -122,10 +122,10 @@ var Graph = function() {
             {
             	// 現在地を取得
             	navigator.geolocation.getCurrentPosition(
-                function( _position )
+                function( position )
             		{
-                  console.log("_position", _position);
-                  var _data = _position.coords ;
+                  console.log("_position", position);
+                  var _data = position.coords ;
 
             			gLat = _data.latitude ;
             			gLon = _data.longitude ;
@@ -141,8 +141,8 @@ var Graph = function() {
             		function( error )
             		{
                   //東京都国立市
-                  gLat = 35.683885 ;
-            			gLon = 139.44138 ;
+                  gLat = 35.683885;
+                  gLon = 139.44138;
                 } ,
             		// [第3引数] オプション
             		{
@@ -153,8 +153,8 @@ var Graph = function() {
               ) ;
             } else {
               //東京都国立市
-              gLat = 35.683885 ;
-              gLon = 139.44138 ;
+              gLat = 35.683885;
+              gLon = 139.44138;
             }
 
   					self.e.publish('init');
@@ -306,7 +306,7 @@ var Graph = function() {
                   .delay(5)
   		            .attr("fill", function(d){
 
-  									console.log(d.properties.MOJI);
+  									// console.log(d.properties.MOJI);
   									var _i = functiontofindIndexByKeyValue(dataSet, "chome", d.properties.MOJI);
 
   									if (_i == undefined) {
